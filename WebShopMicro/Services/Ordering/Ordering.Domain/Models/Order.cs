@@ -4,7 +4,6 @@
     {
         private readonly List<OrderItem> _orderItems = new();
         public IReadOnlyList<OrderItem> OrderItems => _orderItems.AsReadOnly();
-
         public CustomerId CustomerId { get; private set; } = default!;
         public OrderName OrderName { get; private set; } = default!;
         public Address ShippingAddress { get; private set; } = default!;
@@ -17,7 +16,8 @@
             private set { }
         }
 
-        public static Order CreateOrder(OrderId id, CustomerId customerId, OrderName orderName, 
+        //static create method
+        public static Order CreateOrder(OrderId id, CustomerId customerId, OrderName orderName,
             Address shippingAddress, Address billingAddress, Payment payment)
         {
             var order = new Order()
@@ -36,7 +36,7 @@
             return order;
         }
 
-        public void UpdateOrder(OrderName orderName, Address shippingAddress, Address billingAddress, 
+        public void UpdateOrder(OrderName orderName, Address shippingAddress, Address billingAddress,
             Payment payment, OrderStatus orderStatus)
         {
             OrderName = orderName;
@@ -50,10 +50,11 @@
 
         public void AddProduct(ProductId productId, int quantity, decimal price)
         {
+            //validation
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
             ArgumentOutOfRangeException.ThrowIfNegative(price);
 
-            var orderItem = new OrderItem(Id, productId, quantity, price); 
+            var orderItem = new OrderItem(Id, productId, quantity, price);
             _orderItems.Add(orderItem);
         }
 
@@ -65,6 +66,5 @@
                 _orderItems.Remove(orderItem);
             }
         }
-
     }
 }

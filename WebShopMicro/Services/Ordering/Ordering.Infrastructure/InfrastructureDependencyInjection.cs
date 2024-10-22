@@ -1,0 +1,33 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Ordering.Application.Data;
+using Ordering.Infrastructure.Data.Interceptors;
+
+
+namespace Ordering.Infrastructure
+{
+    public static class InfrastructureDependencyInjection
+    {
+        public static IServiceCollection AddInfrastructureServices
+            (this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("Database");
+
+            //add services to the container
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
+
+            services.AddDbContext<OrderingDbContext>((sp, options) =>
+            {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                options.UseSqlServer(connectionString, sqlServerOptions => sqlServerOptions.EnableRetryOnFailure());
+            });
+
+            services.AddScoped<IOrderingDbContext, OrderingDbContext>();
+
+            return services;
+        }
+    }
+}

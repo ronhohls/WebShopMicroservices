@@ -5,8 +5,10 @@
         public Guid Value { get; }
         private CustomerId(Guid value) => Value = value;
 
+        //static create method 
         public static CustomerId Of(Guid value)
         {
+            //validation
             ArgumentNullException.ThrowIfNull(value);
 
             if (value == Guid.Empty)

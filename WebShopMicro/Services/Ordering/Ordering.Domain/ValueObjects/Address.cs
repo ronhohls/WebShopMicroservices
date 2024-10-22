@@ -10,10 +10,12 @@
         public string Province { get; } = default!;
         public string PostalCode { get; } = default!;
 
+        //default constructor, required for EF Core
         protected Address()
         {
         }
 
+        //private constructor
         private Address(string firstName, string lastName, string emailAddress, string addressLine, string country, string province, string postalCode)
         {
             FirstName = firstName;
@@ -25,8 +27,10 @@
             PostalCode = postalCode;
         }
 
+        //static create method
         public static Address Of(string firstName, string lastName, string emailAddress, string addressLine, string country, string province, string postalCode)
         {
+            //validation
             ArgumentException.ThrowIfNullOrWhiteSpace(emailAddress);
             ArgumentException.ThrowIfNullOrWhiteSpace(addressLine);
 

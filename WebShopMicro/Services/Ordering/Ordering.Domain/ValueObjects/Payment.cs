@@ -11,10 +11,12 @@ namespace Ordering.Domain.ValueObjects
         public string CVV { get; } = default!;
         public int PaymentMethod { get; } = default!;
 
+        //default constructor, required for EF Core
         protected Payment()
         {
         }
 
+        //private constructor
         private Payment(string cardName, string cardNumber, string expiration, string cvv, int paymentMethod)
         {
             CardName = cardName;
@@ -24,8 +26,10 @@ namespace Ordering.Domain.ValueObjects
             PaymentMethod = paymentMethod;
         }
 
+        //static create method
         public static Payment Of(string cardName, string cardNumber, string expiration, string cvv, int paymentMethod)
         {
+            //validation
             ArgumentException.ThrowIfNullOrWhiteSpace(cardName);
             ArgumentException.ThrowIfNullOrWhiteSpace(cardNumber);
             ArgumentException.ThrowIfNullOrWhiteSpace(cvv);
