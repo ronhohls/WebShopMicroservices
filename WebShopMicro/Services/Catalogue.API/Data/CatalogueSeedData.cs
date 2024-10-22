@@ -92,7 +92,7 @@ namespace Catalogue.API.Data
                 Brand = "HP",
                 Description = "Reliable performance for every day\r\nLong-lasting battery life\r\nThin and light design makes it easy to cary\r\nMicro-edge bezel display\r\nSophisticated and refined design",
                 ImageFile = "51u8hwVtZpL._AC_UL480_FMwebp_QL65_ .webp",
-                Price = 1,
+                Price = 10999,
                 Category = new List<string>{"Laptop"},
                 CustomFields = new Dictionary<string, string>
                 {

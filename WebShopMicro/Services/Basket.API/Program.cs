@@ -1,6 +1,7 @@
 using Discount.Grpc;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Common.Messaging.MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,15 +42,17 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
 })
     //TODO: remove for production
     //bypass SSL-certificate check for development purposes
-    .ConfigurePrimaryHttpMessageHandler(() =>
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler()
     {
-        var handler = new HttpClientHandler()
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-        };
-        return handler;
-    });
+        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    };
+    return handler;
+});
 
+//async communication services
+builder.Services.AddMessageBroker(builder.Configuration);
 
 //cross-cutting services
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
